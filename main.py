@@ -1,24 +1,36 @@
 import requests
-import choose_sort
+from database import Database
 
-url_paris = "https://wttr.in/Paris?format=j1"
-url_nantes = "https://wttr.in/Nantes?format=j1"
-url_dieppe = "https://wttr.in/Dieppe?format=j1"
-url_rennes = "https://wttr.in/Rennes?format=j1"
-url_rouen = "https://wttr.in/Rouen?format=j1"
+cities = ["Paris", "Nantes", "Dieppe", "Rennes", "Rouen"]
+BASE_URL = "https://wttr.in/{}?format=j1"
 
-response_paris = requests.get(url_paris)
-response_nantes = requests.get(url_nantes)
-response_dieppe = requests.get(url_dieppe)
-response_rennes = requests.get(url_rennes)
-response_rouen = requests.get(url_rouen)
+def get_weather_data(city):
+    """Récupère les données météo d'une ville via l'API"""
+    try:
+        response = requests.get(BASE_URL.format(city), timeout=5)
+        response.raise_for_status()
+        data = response.json()
+        return {
+            "ville": city,
+            "temp_C": int(data["current_condition"][0]["temp_C"])
+        }
+    except requests.exceptions.RequestException as e:
+        print(f"Erreur lors de la récupération des données pour {city}: {e}")
+        return None
 
 def main():
-    print(f"Il fait {response_paris.json()["current_condition"][0]["temp_C"]}°C à Paris")
-    print(f"Il fait {response_nantes.json()["current_condition"][0]["temp_C"]}°C à Nantes")
-    print(f"Il fait {response_dieppe.json()["current_condition"][0]["temp_C"]}°C à Dieppe")
-    print(f"Il fait {response_rennes.json()["current_condition"][0]["temp_C"]}°C à Rennes")
-    print(f"Il fait {response_rouen.json()["current_condition"][0]["temp_C"]}°C à Rouen")
+    db = Database()
+    weather_data = []
+
+    for city in cities:
+        data = get_weather_data(city)
+        if data:
+            weather_data.append(data)
+            db.insert_data(data)
+
+    for item in weather_data:
+        print(f"Il fait {item['temp_C']}°C à {item['ville']}")
+
     print("--------------------")
     print("Choisissez un type de tri:")
     print("1. Bubble sort")
@@ -26,10 +38,12 @@ def main():
     print("3. Quick sort")
     print("4. Selection sort")
     print("5. Quitter")
-    sort_type = int(input())
-    array = [response_paris.json()["current_condition"][0]["temp_C"], response_nantes.json()["current_condition"][0]["temp_C"], response_dieppe.json()["current_condition"][0]["temp_C"], response_rennes.json()["current_condition"][0]["temp_C"], response_rouen.json()["current_condition"][0]["temp_C"]]
-    choose_sort.ChooseSort.choose_sort(array, sort_type)
     
+    sort_type = int(input())
+    temperatures = [item["temp_C"] for item in weather_data]
+
+    from choose_sort import ChooseSort
+    ChooseSort.choose_sort(temperatures, sort_type)
 
 if __name__ == "__main__":
     main()

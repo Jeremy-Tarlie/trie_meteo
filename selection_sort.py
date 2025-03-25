@@ -6,4 +6,4 @@ class SelectionSort:
                 if array[j] < array[min_index]:
                     min_index = j
             array[i], array[min_index] = array[min_index], array[i]
-        print(array)
+        return array

@@ -7,4 +7,4 @@ class InsertionSort:
                 array[j + 1] = array[j]
                 j -= 1
             array[j + 1] = key
-        print(array)
+        return array
