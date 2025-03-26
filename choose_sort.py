@@ -6,7 +6,6 @@ import sys
 import time
 
 class ChooseSort:
-    @staticmethod
     def choose_sort(array, sort_type):
         algorithms = {
             1: ("Bubble Sort", bubble_sort.BubbleSort.bubble_sort),

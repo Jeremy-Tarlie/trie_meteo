@@ -44,6 +44,22 @@ def main():
 
     from choose_sort import ChooseSort
     ChooseSort.choose_sort(temperatures, sort_type)
+    
+    print("------------")
+    print("Voulez-vous effectuer une recherche ? (O/N)")
+    if input().upper() == 'O':
+        print("Entrez la température à rechercher :")
+        target = int(input())
+
+        print("Choisissez un type de recherche:")
+        print("1. Linear Search")
+        print("2. Binary Search")
+        print("3. Quitter")
+
+        search_type = int(input())
+
+        from choose_search import ChooseSearch
+        ChooseSearch.choose_search(temperatures, target, search_type)
 
 if __name__ == "__main__":
     main()
