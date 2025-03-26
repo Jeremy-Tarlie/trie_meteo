@@ -1,4 +1,4 @@
-# TP-YUG : Application de Tri et Recherche avec Données Météo
+# Application de Tri et Recherche avec Données Météo
 
 Ce projet est une application Python qui récupère les données météorologiques de plusieurs villes, les stocke dans une base de données MongoDB, et permet d'effectuer des opérations de tri et de recherche sur les températures.
 
